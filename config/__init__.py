@@ -2,6 +2,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import os
+import logging
+import datetime
 
 # Read PYTHON_TEMPLATE_CONFIG environment variable (raise error if missing or badly
 # configured), use this to decide on our config and import the relevant python
@@ -11,6 +13,19 @@ import os
 # testing.py
 
 LOG_FILE = "./catflap.log"
+
+# this error is raised by Twitter if we send a duplicate message
+DUPLICATE_MESSAGE_TWITTER_ERROR = u'Status is a duplicate.'
+
+# setup some logging
+logger = logging.getLogger('catflap')
+log_hdlr = logging.FileHandler(LOG_FILE)
+log_formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+log_hdlr.setFormatter(log_formatter)
+logger.addHandler(log_hdlr)
+logger.setLevel(logging.INFO)
+
+TIME_BETWEEN_EVENTS = datetime.timedelta(seconds=10)
 
 
 CONFIG_ENV_VAR = "PYTHON_TEMPLATE_CONFIG"

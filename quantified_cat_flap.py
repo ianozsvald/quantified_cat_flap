@@ -3,6 +3,7 @@
 # -*- coding: utf-8 -*-
 # http://www.python.org/dev/peps/pep-0263/
 import argparse
+import logging
 import time
 import config  # assumes env var PYTHON_TEMPLATE_CONFIG is configured
 import RPi.GPIO as GPIO
@@ -11,9 +12,13 @@ import RPi.GPIO as GPIO
 # $ PYTHON_TEMPLATE_CONFIG=production python start_here.py --help
 # $ PYTHON_TEMPLATE_CONFIG=production python start_here.py hello -o bob
 
-def dummy_function():
-    """Delete this dummy function"""
-    return "Hello"
+
+logger = logging.getLogger('catflap')
+log_hdlr = logging.FileHandler(config.LOG_FILE)
+log_formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+log_hdlr.setFormatter(log_formatter)
+logger.addHandler(log_hdlr)
+logger.setLevel(logging.INFO)
 
 
 if __name__ == "__main__":
@@ -26,8 +31,18 @@ if __name__ == "__main__":
     print args
     #print "{} {}".format(args.positional_arg, args.optional_arg)
 
+    logger.info("Starting up")
+
+    PIN_INPUT_1 = 3  # GPIO 0 (SDA), bottom row, second pin after P1 notch
+    PIN_GROUND = 6  # GROUND, top row, third pin after P1 notch
+
     GPIO.setmode(GPIO.BOARD)
-    GPIO.setup(3, GPIO.IN, GPIO.PUD_UP)
+    GPIO.setup(PIN_INPUT_1, GPIO.IN, GPIO.PUD_UP)
+    input_1 = GPIO.input(PIN_INPUT_1)
     while True:
-        print GPIO.input(3)
-        time.sleep(0.1)
+        input_1_new = GPIO.input(PIN_INPUT_1)
+        logger.info("Pin value" + str(input_1_new))
+        if input_1_new != input_1:
+            pass  # do something
+        input_1 = input_1_new
+        time.sleep(0.05)

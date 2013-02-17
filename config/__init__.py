@@ -9,6 +9,10 @@ import os
 
 # This assumes that locally we have suitable python files e.g. production.py,
 # testing.py
+
+LOG_FILE = "./catflap.log"
+
+
 CONFIG_ENV_VAR = "PYTHON_TEMPLATE_CONFIG"
 CONFIG_ENV_VAR_PRODUCTION = "production"
 CONFIG_ENV_VAR_TESTING = "testing"

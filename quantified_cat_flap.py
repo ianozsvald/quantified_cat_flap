@@ -12,6 +12,14 @@ import RPi.GPIO as GPIO
 # $ PYTHON_TEMPLATE_CONFIG=production python start_here.py --help
 # $ PYTHON_TEMPLATE_CONFIG=production python start_here.py hello -o bob
 
+import twitter
+from twitter_tokens import *  # not git controlled
+
+twitter_api = twitter.Api(consumer_key=CONSUMER_KEY,
+                          consumer_secret=CONSUMER_SECRET,
+                          access_token_key=ACCESS_TOKEN,
+                          access_token_secret=ACCESS_TOKEN_SECRET)
+
 
 logger = logging.getLogger('catflap')
 log_hdlr = logging.FileHandler(config.LOG_FILE)
@@ -21,7 +29,16 @@ logger.addHandler(log_hdlr)
 logger.setLevel(logging.INFO)
 
 
+def post_update():
+    msg = "#catflatreport: Flippy Flitty Catty Flappy"
+    twitter_api.PostUpdate(msg)
+
+
 if __name__ == "__main__":
+    post_update()
+
+
+if __name__ == "__main__X":
     parser = argparse.ArgumentParser(description='Project description')
     #parser.add_argument('positional_arg', help='required positional argument')
     #parser.add_argument('--optional_arg', '-o', help='optional argument', default="Ian")

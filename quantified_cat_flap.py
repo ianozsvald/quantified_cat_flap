@@ -41,8 +41,7 @@ if __name__ == "__main__":
     input_1 = GPIO.input(PIN_INPUT_1)
     while True:
         input_1_new = GPIO.input(PIN_INPUT_1)
-        logger.info("Pin value" + str(input_1_new))
         if input_1_new != input_1:
-            pass  # do something
+            logger.info("Pin changed from %s to %s" % (str(input_1), str(input_1_new)))
         input_1 = input_1_new
         time.sleep(0.05)

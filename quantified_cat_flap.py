@@ -5,15 +5,24 @@
 import argparse
 import logging
 import time
+import random
 import config  # assumes env var PYTHON_TEMPLATE_CONFIG is configured
 import RPi.GPIO as GPIO
+import twitter
+from twitter_tokens import *  # not git controlled
 
 # Usage:
 # $ PYTHON_TEMPLATE_CONFIG=production python start_here.py --help
 # $ PYTHON_TEMPLATE_CONFIG=production python start_here.py hello -o bob
 
-import twitter
-from twitter_tokens import *  # not git controlled
+# PROBLEMS:
+# entirely untested at present!
+# make the gpio read a generator, yield status, if_status_changed,
+# time_delta_for_change
+# use a list of events for testing
+# post an event to an internal Queue for 'use', the only current use will be
+# to post to twitter (but we can get Queue item and test it)
+
 
 twitter_api = twitter.Api(consumer_key=CONSUMER_KEY,
                           consumer_secret=CONSUMER_SECRET,
@@ -30,11 +39,18 @@ logger.setLevel(logging.INFO)
 
 
 def post_update():
-    msg = "#catflatreport: Flippy Flitty Catty Flappy"
+    hash_tag = "#catflatreport"
+    msgs = ["%s: kitty stretching legs" % (hash_tag),
+            "%s: is that ANOTHER worm?!" % (hash_tag),
+            "%s: kitty sees something moving out there" % (hash_tag),
+            "%s: chase Polly chase!" % (hash_tag),
+            "%s: up the tree up the tree!" % (hash_tag),
+            "%s: maybe time to curl up and rest now" % (hash_tag)]
+    msg = random.choice(msgs)
     twitter_api.PostUpdate(msg)
 
 
-if __name__ == "__main__":
+if __name__ == "__main__X":
     post_update()
 
 
@@ -60,5 +76,6 @@ if __name__ == "__main__X":
         input_1_new = GPIO.input(PIN_INPUT_1)
         if input_1_new != input_1:
             logger.info("Pin changed from %s to %s" % (str(input_1), str(input_1_new)))
+            post_update()
         input_1 = input_1_new
         time.sleep(0.05)

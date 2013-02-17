@@ -3,6 +3,7 @@
 # -*- coding: utf-8 -*-
 # http://www.python.org/dev/peps/pep-0263/
 import argparse
+import time
 import config  # assumes env var PYTHON_TEMPLATE_CONFIG is configured
 import RPi.GPIO as GPIO
 

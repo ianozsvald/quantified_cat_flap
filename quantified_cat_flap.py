@@ -3,6 +3,7 @@
 # -*- coding: utf-8 -*-
 # http://www.python.org/dev/peps/pep-0263/
 import argparse
+import datetime
 import logging
 import time
 import random
@@ -69,6 +70,9 @@ if __name__ == "__main__":
     PIN_INPUT_1 = 3  # GPIO 0 (SDA), bottom row, second pin after P1 notch
     PIN_GROUND = 6  # GROUND, top row, third pin after P1 notch
 
+    time_of_last_event = datetime.datetime.utcnow()
+    TIME_BETWEEN_EVENTS = datetime.timedelta(seconds=5)
+
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(PIN_INPUT_1, GPIO.IN, GPIO.PUD_UP)
     input_1 = GPIO.input(PIN_INPUT_1)
@@ -76,6 +80,10 @@ if __name__ == "__main__":
         input_1_new = GPIO.input(PIN_INPUT_1)
         if input_1_new != input_1:
             logger.info("Pin changed from %s to %s" % (str(input_1), str(input_1_new)))
-            post_update()
+            time_of_new_event = datetime.datetime.utcnow()
+            time_delta = time_of_new_event - time_of_last_event
+            if time_delta > TIME_BETWEEN_EVENTS:
+                time_of_last_event = time_of_new_event
+                post_update()
         input_1 = input_1_new
         time.sleep(0.05)

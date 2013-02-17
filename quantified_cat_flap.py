@@ -29,7 +29,7 @@ logger = config.logger
 
 def post_update(last_message_posted):
     """Send a message to Twitter"""
-    hash_tag = "#catflatreport"
+    hash_tag = "#catflapbot"
     while True:
         msgs = ["%s: Polly stretches legs" % (hash_tag),
                 "%s: Polly! Is that ANOTHER worm?!" % (hash_tag),

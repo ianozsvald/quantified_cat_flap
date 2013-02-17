@@ -14,7 +14,7 @@ CONFIG_ENV_VAR_PRODUCTION = "production"
 CONFIG_ENV_VAR_TESTING = "testing"
 config_set = False  # only set to True if we have find a valid ENV VAR
 config_choice = os.getenv(CONFIG_ENV_VAR)
-if config_choice == CONFIG_ENV_VAR_PRODUCTION:
+if config_choice == CONFIG_ENV_VAR_PRODUCTION or config_choice is None:
     from production import *
     config_set = True
 if config_choice == CONFIG_ENV_VAR_TESTING:

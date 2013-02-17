@@ -4,6 +4,7 @@
 # http://www.python.org/dev/peps/pep-0263/
 import argparse
 import config  # assumes env var PYTHON_TEMPLATE_CONFIG is configured
+import RPi.GPIO as GPIO
 
 # Usage:
 # $ PYTHON_TEMPLATE_CONFIG=production python start_here.py --help
@@ -16,10 +17,16 @@ def dummy_function():
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Project description')
-    parser.add_argument('positional_arg', help='required positional argument')
-    parser.add_argument('--optional_arg', '-o', help='optional argument', default="Ian")
+    #parser.add_argument('positional_arg', help='required positional argument')
+    #parser.add_argument('--optional_arg', '-o', help='optional argument', default="Ian")
 
     args = parser.parse_args()
-    print "These are our args:"
+    #print "These are our args:"
     print args
-    print "{} {}".format(args.positional_arg, args.optional_arg)
+    #print "{} {}".format(args.positional_arg, args.optional_arg)
+
+    GPIO.setmode(GPIO.BOARD)
+    GPIO.setup(3, GPIO.IN, GPIO.PUD_UP)
+    while True:
+        print GPIO.input(3)
+        time.sleep(0.1)

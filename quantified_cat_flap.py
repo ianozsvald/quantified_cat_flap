@@ -54,7 +54,7 @@ if __name__ == "__main__X":
     post_update()
 
 
-if __name__ == "__main__X":
+if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Project description')
     #parser.add_argument('positional_arg', help='required positional argument')
     #parser.add_argument('--optional_arg', '-o', help='optional argument', default="Ian")

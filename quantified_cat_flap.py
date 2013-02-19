@@ -37,7 +37,7 @@ def post_update(last_message_posted):
     while True:
         nbr_looped += 1
         #msgs = ["%s: Polly stretches legs" % (hash_tag)]  # for debug
-        msgs = ["%s: Polly stretches legs" % (hash_tag)]
+        msgs = ["%s: Polly stretches legs" % (hash_tag),
                 "%s: Polly! Is that ANOTHER worm?!" % (hash_tag),
                 "%s: do you see something moving out there?" % (hash_tag),
                 "%s: chase Polly chase!" % (hash_tag),

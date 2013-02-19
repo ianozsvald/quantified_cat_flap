@@ -94,5 +94,5 @@ if __name__ == "__main__":
     try:
         loop()
     except Exception as err:
-        loger.exception("Caught at the end of the program: %s" % (str(err)))
+        logger.exception("Caught at the end of the program: %s" % (str(err)))
         raise

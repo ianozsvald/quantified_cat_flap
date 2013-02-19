@@ -32,13 +32,16 @@ PIN_GROUND = 6  # GROUND, top row, third pin after P1 notch
 def post_update(last_message_posted):
     """Send a message to Twitter"""
     hash_tag = "#catflapbot"
+    MAX_LOOP = 5
+    nbr_looped = 0
     while True:
-        msgs = ["%s: Polly stretches legs" % (hash_tag),
-                "%s: Polly! Is that ANOTHER worm?!" % (hash_tag),
-                "%s: do you see something moving out there?" % (hash_tag),
-                "%s: chase Polly chase!" % (hash_tag),
-                "%s: up the tree up the tree!" % (hash_tag),
-                "%s: Polly decides it is time to curl up and rest now" % (hash_tag)]
+        nbr_looped += 1
+        msgs = ["%s: Polly stretches legs" % (hash_tag),]
+                #"%s: Polly! Is that ANOTHER worm?!" % (hash_tag),
+                #"%s: do you see something moving out there?" % (hash_tag),
+                #"%s: chase Polly chase!" % (hash_tag),
+                #"%s: up the tree up the tree!" % (hash_tag),
+                #"%s: Polly decides it is time to curl up and rest now" % (hash_tag)]
         msg = random.choice(msgs)
         sent_ok = False
         try:
@@ -48,8 +51,12 @@ def post_update(last_message_posted):
             if err.message == config.DUPLICATE_MESSAGE_TWITTER_ERROR:
                 # we've posted a duplicate message - try again
                 logger.info("We have sent a duplicate to Twitter: %s" % (str(err)))
+            else:
+                logger.info("Twitter error: %s" % (str(err)))
         if sent_ok:
             break
+        if nbr_looped > MAX_LOOP:
+            logger.error("We looped too many times for post_update, bailing (is something wrong with Twitter?)")
     return msg
 
 
@@ -59,7 +66,6 @@ def loop():
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(PIN_INPUT_1, GPIO.IN, GPIO.PUD_UP)
     input_1 = GPIO.input(PIN_INPUT_1)
-    1/0
     while True:
         input_1_new = GPIO.input(PIN_INPUT_1)
         if input_1_new != input_1:
@@ -73,13 +79,13 @@ def loop():
         time.sleep(0.05)
 
 
-if __name__ == "__main__X":
+if __name__ == "__main__":
     last_message_posted = None
     last_message_posted = post_update(last_message_posted)
     print last_message_posted
 
 
-if __name__ == "__main__":
+if __name__ == "__main__X":
     parser = argparse.ArgumentParser(description='Project description')
     #parser.add_argument('positional_arg', help='required positional argument')
     #parser.add_argument('--optional_arg', '-o', help='optional argument', default="Ian")

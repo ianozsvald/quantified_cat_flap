@@ -20,7 +20,8 @@ DUPLICATE_MESSAGE_TWITTER_ERROR = u'Status is a duplicate.'
 # setup some logging
 logger = logging.getLogger('catflap')
 log_hdlr = logging.FileHandler(LOG_FILE)
-log_formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+log_formatter = logging.Formatter('%(asctime)s {%(pathname)s:%(lineno)d} %(levelname)s %(message)s')
+#formatter = logging.Formatter('[%(asctime)s] p%(process)s {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s','%m-%d %H:%M:%S')
 log_hdlr.setFormatter(log_formatter)
 logger.addHandler(log_hdlr)
 logger.setLevel(logging.INFO)

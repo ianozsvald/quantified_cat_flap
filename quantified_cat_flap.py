@@ -36,16 +36,18 @@ def post_update(last_message_posted):
     nbr_looped = 0
     while True:
         nbr_looped += 1
-        msgs = ["%s: Polly stretches legs" % (hash_tag),]
-                #"%s: Polly! Is that ANOTHER worm?!" % (hash_tag),
-                #"%s: do you see something moving out there?" % (hash_tag),
-                #"%s: chase Polly chase!" % (hash_tag),
-                #"%s: up the tree up the tree!" % (hash_tag),
-                #"%s: Polly decides it is time to curl up and rest now" % (hash_tag)]
+        #msgs = ["%s: Polly stretches legs" % (hash_tag)]  # for debug
+        msgs = ["%s: Polly stretches legs" % (hash_tag)]
+                "%s: Polly! Is that ANOTHER worm?!" % (hash_tag),
+                "%s: do you see something moving out there?" % (hash_tag),
+                "%s: chase Polly chase!" % (hash_tag),
+                "%s: up the tree up the tree!" % (hash_tag),
+                "%s: Polly decides it is time to curl up and rest now" % (hash_tag)]
         msg = random.choice(msgs)
         sent_ok = False
         try:
             config.twitter_api.PostUpdate(msg)
+            logger.info("Msg '%s' sent to Twitter" % (str(msg)))
             sent_ok = True
         except config.twitter.TwitterError as err:
             if err.message == config.DUPLICATE_MESSAGE_TWITTER_ERROR:
@@ -80,24 +82,19 @@ def loop():
         time.sleep(0.05)
 
 
-if __name__ == "__main__":
+if __name__ == "__main__X":
     last_message_posted = None
     last_message_posted = post_update(last_message_posted)
     print last_message_posted
 
 
-if __name__ == "__main__X":
+if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Project description')
-    #parser.add_argument('positional_arg', help='required positional argument')
     #parser.add_argument('--optional_arg', '-o', help='optional argument', default="Ian")
-
     args = parser.parse_args()
-    #print "These are our args:"
     print args
-    #print "{} {}".format(args.positional_arg, args.optional_arg)
 
     logger.info("Starting up")
-
     try:
         loop()
     except Exception as err:

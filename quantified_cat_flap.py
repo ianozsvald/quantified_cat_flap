@@ -57,6 +57,7 @@ def post_update(last_message_posted):
             break
         if nbr_looped > MAX_LOOP:
             logger.error("We looped too many times for post_update, bailing (is something wrong with Twitter?)")
+            break
     return msg
 
 

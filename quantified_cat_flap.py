@@ -25,6 +25,8 @@ except:
 # to post to twitter (but we can get Queue item and test it)
 
 logger = config.logger
+PIN_INPUT_1 = 3  # GPIO 0 (SDA), bottom row, second pin after P1 notch
+PIN_GROUND = 6  # GROUND, top row, third pin after P1 notch
 
 
 def post_update(last_message_posted):
@@ -51,6 +53,26 @@ def post_update(last_message_posted):
     return msg
 
 
+def loop():
+    time_of_last_event = datetime.datetime.utcnow()
+    last_message_posted = None
+    GPIO.setmode(GPIO.BOARD)
+    GPIO.setup(PIN_INPUT_1, GPIO.IN, GPIO.PUD_UP)
+    input_1 = GPIO.input(PIN_INPUT_1)
+    1/0
+    while True:
+        input_1_new = GPIO.input(PIN_INPUT_1)
+        if input_1_new != input_1:
+            logger.info("Pin changed from %s to %s" % (str(input_1), str(input_1_new)))
+            time_of_new_event = datetime.datetime.utcnow()
+            time_delta = time_of_new_event - time_of_last_event
+            if time_delta > config.TIME_BETWEEN_EVENTS:
+                time_of_last_event = time_of_new_event
+                last_message_posted = post_update(last_message_posted)
+        input_1 = input_1_new
+        time.sleep(0.05)
+
+
 if __name__ == "__main__X":
     last_message_posted = None
     last_message_posted = post_update(last_message_posted)
@@ -69,23 +91,8 @@ if __name__ == "__main__":
 
     logger.info("Starting up")
 
-    PIN_INPUT_1 = 3  # GPIO 0 (SDA), bottom row, second pin after P1 notch
-    PIN_GROUND = 6  # GROUND, top row, third pin after P1 notch
-
-    time_of_last_event = datetime.datetime.utcnow()
-    last_message_posted = None
-
-    GPIO.setmode(GPIO.BOARD)
-    GPIO.setup(PIN_INPUT_1, GPIO.IN, GPIO.PUD_UP)
-    input_1 = GPIO.input(PIN_INPUT_1)
-    while True:
-        input_1_new = GPIO.input(PIN_INPUT_1)
-        if input_1_new != input_1:
-            logger.info("Pin changed from %s to %s" % (str(input_1), str(input_1_new)))
-            time_of_new_event = datetime.datetime.utcnow()
-            time_delta = time_of_new_event - time_of_last_event
-            if time_delta > config.TIME_BETWEEN_EVENTS:
-                time_of_last_event = time_of_new_event
-                last_message_posted = post_update(last_message_posted)
-        input_1 = input_1_new
-        time.sleep(0.05)
+    try:
+        loop()
+    except Exception as err:
+        loger.exception("Caught at the end of the program: %s" % (str(err)))
+        raise

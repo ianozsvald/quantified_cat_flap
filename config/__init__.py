@@ -13,6 +13,7 @@ import datetime
 # testing.py
 
 LOG_FILE = "./catflap.log"
+LOG_FILE_DATA = "./catflap_data.log"
 
 # this error is raised by Twitter if we send a duplicate message
 DUPLICATE_MESSAGE_TWITTER_ERROR = u'Status is a duplicate.'
@@ -25,6 +26,14 @@ log_formatter = logging.Formatter('%(asctime)s {%(pathname)s:%(lineno)d} %(level
 log_hdlr.setFormatter(log_formatter)
 logger.addHandler(log_hdlr)
 logger.setLevel(logging.INFO)
+
+logger_data = logging.getLogger('catflap_data')
+log_hdlr_data = logging.FileHandler(LOG_FILE_DATA)
+log_formatter_data = logging.Formatter('%(asctime)s %(message)s')
+log_hdlr_data.setFormatter(log_formatter_data)
+logger_data.addHandler(log_hdlr_data)
+logger_data.setLevel(logging.INFO)
+
 
 TIME_BETWEEN_EVENTS = datetime.timedelta(seconds=10)
 

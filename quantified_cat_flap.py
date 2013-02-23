@@ -77,6 +77,7 @@ def loop():
             time_delta = time_of_new_event - time_of_last_event
             if time_delta > config.TIME_BETWEEN_EVENTS:
                 time_of_last_event = time_of_new_event
+                config.logger_data.info("catflap_operates")
                 last_message_posted = post_update(last_message_posted)
         input_1 = input_1_new
         time.sleep(0.05)
